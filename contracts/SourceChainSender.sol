@@ -22,7 +22,7 @@ contract SourceChainSender is OwnerIsCreator, ReentrancyGuard {
     }
 
     /* Type declarations */
-    IRouterClient private immutable i_router;
+    IRouterClient private  s_router;
     LinkTokenInterface private immutable i_linkToken;
     IERC20 private immutable i_crossChainToken;
     mapping(address => uint256) private balances;
@@ -51,7 +51,7 @@ contract SourceChainSender is OwnerIsCreator, ReentrancyGuard {
     error SourceChainSender__WithdrawFailed();
 
     constructor(address _router, address _link, address _crossChainToken) {
-        i_router = IRouterClient(_router);
+        s_router = IRouterClient(_router);
         i_linkToken = LinkTokenInterface(_link);
         i_crossChainToken = IERC20(_crossChainToken);
     }
@@ -166,6 +166,10 @@ contract SourceChainSender is OwnerIsCreator, ReentrancyGuard {
 
     function getTokenAddress() public view returns (address) {
         return address(i_crossChainToken);
+    }
+
+    function getRouter()external view returns(_router IRouterClient) {
+        _router =  s_router;
     }
 
     /* fallback & receive */
