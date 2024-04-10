@@ -75,9 +75,15 @@ npm hardhat run scripts/03-transferowner.js --network fuji  (Pass in the deploye
 ```
 
 4. Deploy SourceChainSender.sol on Polygon Mumbai
-
+   Before running this script, first go to the designated contract of the website and drip the relevant CCIP-BnM currency.
+   https://docs.chain.link/ccip/supported-networks/v1_2_0/testnet#polygon-mumbai-ethereum-sepolia
 ```
-yarn hardhat run scripts/04-deploy-sender.js --network polygonMumbai
+npm hardhat run scripts/04-deploy-sender.js --network polygonMumbai
+```
+
+5. Crosschain CCIP-BnM from Polygon Mumbai to Avalanche Fuji 
+```
+npm hardhat run scripts/05-crosschain --network polygonMumbai
 ```
 
 ## Cross-chain 1 USDC

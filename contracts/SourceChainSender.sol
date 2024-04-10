@@ -121,22 +121,22 @@ contract SourceChainSender is OwnerIsCreator, ReentrancyGuard {
             feeToken: feeToken == payFeesIn.LINK ? address(i_linkToken) : address(0)
         });
 
-        uint256 fees = i_router.getFee(destinationChainSelector, evm2AnyMessage);
+        uint256 fees = s_router.getFee(destinationChainSelector, evm2AnyMessage);
 
         if (feeToken == payFeesIn.LINK) {
             if (fees > i_linkToken.balanceOf(address(this))) {
                 revert NotEnoughBalance(i_linkToken.balanceOf(address(this)), fees);
             }
 
-            i_linkToken.approve(address(i_router), fees);
+            i_linkToken.approve(address(s_router), fees);
 
-            messageId = i_router.ccipSend(destinationChainSelector, evm2AnyMessage);
+            messageId = s_router.ccipSend(destinationChainSelector, evm2AnyMessage);
         } else {
             if (fees > address(this).balance) {
                 revert("balance is not enough");
             }
 
-            messageId = i_router.ccipSend{value: fees}(destinationChainSelector, evm2AnyMessage);
+            messageId = s_router.ccipSend{value: fees}(destinationChainSelector, evm2AnyMessage);
         }
 
         emit MessageSent(messageId, destinationChainSelector, receiver, address(i_linkToken), fees, to, amount);
@@ -168,7 +168,7 @@ contract SourceChainSender is OwnerIsCreator, ReentrancyGuard {
         return address(i_crossChainToken);
     }
 
-    function getRouter()external view returns(_router IRouterClient) {
+    function getRouter()external view returns(IRouterClient _router) {
         _router =  s_router;
     }
 
